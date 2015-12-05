@@ -330,7 +330,6 @@ class OrderController extends PublicController
         $subObject->getColumnDimension('E')->setWidth(15);
         $subObject->getColumnDimension('F')->setWidth(15);
         $subObject->getColumnDimension('G')->setWidth(15);
-        $subObject->getColumnDimension('H')->setWidth(15);
         
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(20);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
@@ -351,9 +350,8 @@ class OrderController extends PublicController
         $objPHPExcel->getActiveSheet()->setCellValue('C4', '商品名');
         $objPHPExcel->getActiveSheet()->setCellValue('D4', '规格');
         $objPHPExcel->getActiveSheet()->setCellValue('E4', '数量');
-        $objPHPExcel->getActiveSheet()->setCellValue('F4', '大客户价');
-        $objPHPExcel->getActiveSheet()->setCellValue('G4', '店长采购价');
-        $objPHPExcel->getActiveSheet()->setCellValue('H4', '店长留言');
+        $objPHPExcel->getActiveSheet()->setCellValue('F4', '店长采购价');
+        $objPHPExcel->getActiveSheet()->setCellValue('G4', '店长留言');
         
         $row = 5;
         $ii  = 1;
@@ -363,9 +361,8 @@ class OrderController extends PublicController
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . $row, $goods['goods_name']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D' . $row, '1×' . $goods['goods_info'][0]['package_num']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E' . $row, $goods['goods_nums']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $row, $goods['goods_nums'] * $goods['goods_info'][0]['biz_price']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $row, $goods['goods_nums'] * $goods['goods_info'][0]['trade_price'] * $goods['goods_info'][0]['package_num']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $row, $order_info['order_message']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $row, $goods['goods_nums'] * $goods['goods_info'][0]['trade_price'] * $goods['goods_info'][0]['package_num']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $row, $order_info['order_message']);
             
             $row += 1;
             $ii += 1;
@@ -378,8 +375,7 @@ class OrderController extends PublicController
         $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E' . $row, '=SUM(E5:E' . ($row - 1) . ')');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $row, '=SUM(F5:F' . ($row - 1) . ')');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $row, '=SUM(G5:G' . ($row - 1) . ')');
-        $objPHPExcel->getActiveSheet()->mergeCells('H5:H' . $row);
+        $objPHPExcel->getActiveSheet()->mergeCells('G5:G' . $row);
         
         $objPHPExcel->getActiveSheet()->mergeCells('A' . ($row + 1) . ':C' . ($row + 1));
         $objPHPExcel->getActiveSheet()->getStyle('A' . ($row + 1))->getFont()->getColor()->setARGB('#FF0000');

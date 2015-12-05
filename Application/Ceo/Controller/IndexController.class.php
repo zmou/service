@@ -2,41 +2,43 @@
 namespace Ceo\Controller;
 use Think\Controller;
 class IndexController extends PublicController {
-    public function index() {
+    public function index()
+    {
+        $sch_id = I('session.sch_id');
 		$db=M('wechat_user');
-		//统计分销商总数
-		$resaler_nums=$db->where(array('role_id'=>3))->count();
+		
 		//统计店铺总数
-		$shop_nums=$db->where(array('role_id'=>2))->count();
+        $shop_nums = M('shop')->where(array('sch_id'=>array('in',$sch_id),'status'=>1))->count();
+		$shop      = M('shop')->field('id')->where(array('sch_id'=>array('in',$sch_id),'status'=>1))->select();
+        $shop_id = array(); 
+        $shop_id = array_reduce($shop, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+
+        //等待审核，店铺
+        $map = array(
+            'status' => 0,
+            'sch_id' => array('in',$sch_id)
+        );
+        $audit_shop = M('shop')->where($map)->count();
+
 		//订单统计
-		$today=strtotime(date('Y-m-d',time()));
-		
-		$map=array('order_time'=>array('egt',$today));
-		//订单总数
-		$order_total=M('order_info')->where($map)->count();
-		//已付款订单
-		$map['pay_status']=1;
-		$pay_order_total=M('order_info')->where($map)->count();
-		$map['pay_status']=0;
-		$unpay_order_total=M('order_info')->where($map)->count();
-		//商品统计
-		//上架商品
-		$sale_goods_total=M('goods')->where(array('is_sale'=>1))->count();
-		//下架商品
-		$unsale_goods_total=M('goods')->where(array('is_sale'=>0))->count();
-		//最新商品
-		$new_time=strtotime(date('Y-m-d',time()));
-		$new_goods_total=M('goods')->where(array('is_sale'=>0,'posttime'=>array('egt',$new_time)))->count();
+		$today = strtotime(date('Y-m-d',time()));
+		$map   = array(
+            'order_time' => array('egt',$today),
+            'pay_status' => 1,
+            'school_id'  => array('in',$sch_id)
+        );
+		// 学生订单
+        $map['role_id']   = 1;
+		$user_order_total = M('order_info')->where($map)->count();
+		// 店长订单
+		$map['role_id']   = 2;
+		$shop_order_total = M('order_info')->where($map)->count();
 			
-		$count_info['resaler_nums']=$resaler_nums;
-		$count_info['shop_nums']=$shop_nums;
-		$count_info['order_total']=$order_total;
-		$count_info['pay_order_total']=$pay_order_total;
-		$count_info['unpay_order_total']=$unpay_order_total;
-		
-		$count_info['sale_goods_total']=$sale_goods_total;
-		$count_info['unsale_goods_total']=$unsale_goods_total;
-		$count_info['new_goods_total']=$new_goods_total;
+		$count_info                       = array();
+		$count_info['shop_nums']          = $shop_nums;
+		$count_info['user_order_total']   = $user_order_total;
+        $count_info['shop_order_total']   = $shop_order_total;
+		$count_info['audit_shop']         = $audit_shop;
 		
 		$this->assign('count_info',$count_info);
         $this->display();
