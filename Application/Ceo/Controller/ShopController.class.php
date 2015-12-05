@@ -26,7 +26,6 @@ class ShopController extends PublicController
         $sch_id = session('sch_id');
         $db     = M('wechat_user');
         
-        dump($db);exit;
         $shop    = M('shop')->where(array(
             'sch_id' => array(
                 'in',
