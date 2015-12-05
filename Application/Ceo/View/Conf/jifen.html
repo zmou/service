@@ -1,0 +1,67 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>咕币规则设置</h4>  
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+            <form method="post" action="{twotree#:U('jifen')}">
+            	<!--<p>
+                   注　　册：<input type="text" name="reg"  class="text-input small-input num" value="{twotree#$info.reg}" placeholder="注册" required>咕币
+                </p>
+                <p>
+                    每日登录：<input type="text" name="login"  class="text-input small-input num" value="{twotree#$info.login}" placeholder="登录" required>咕币
+                </p>
+                <p>
+                   分　　享：<input type="text" name="share"  class="text-input small-input num" value="{twotree#$info.share}" placeholder="分享" required>咕币
+                </p>-->
+                <p>
+                   每日签到：<input type="text" name="sign"  class="text-input small-input num" value="{twotree#$info.sign}" placeholder="签到" required> 咕币
+                </p>
+                <p>
+                   朋友请　：<input type="text" name="friend"  class="text-input small-input num" value="{twotree#$info.friend}" placeholder="朋友请" required> 咕币
+                </p>
+             	<p>
+                   邀请好友：<input type="text" name="reg_tui"  class="text-input small-input num" value="{twotree#$info.reg_tui}" placeholder="邀请好友" required>咕币
+                </p>              
+               <p>
+                  <input type="submit" value="保存设置" class="button">
+                </p>
+              <div class="clear"></div>
+            </form>
+</div>
+<!--kindeditor-->
+<link rel="stylesheet" href="/plugins/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="/plugins/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/plugins/kindeditor/lang/zh_CN.js"></script>
+<!--kindeditor-->
+<script>
+//单图上传
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#image1').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url1').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url1').val(url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+		K('#image2').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url1').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url2').val(url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+</script>
+</block>

@@ -1,0 +1,131 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>订单详情</h4>
+ <a href="{twotree#:U('order_list')}" style="margin:5px 10px;" class="btn align-right">返回列表</a>
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+    <form id="form" method="post" action="{twotree#:U('order_edit',array('id'=>$data['id']))}">
+        <fieldset>
+             <legend>订单信息</legend>
+        <p>
+            订单ID：【{twotree#$data.id}】
+        </p>
+        <p>
+            下单用户：【{twotree#$data['user_id']}】&nbsp;
+            <a title="查看下单用户" target="_blank" href="{twotree#:U('Wxusers/edit',array('id'=>$data['order_user']['id']))}">查看</a>
+        </p>
+        <p>
+            订单编号：【{twotree#$data.order_sn}】
+        </p>
+        <p>
+            订单状态：
+            <eq name="data.order_status" value="3">
+            <font color="green">已签收【交易完成】</font>
+            <else/>
+                <select name="order_status">
+                <eq name="data.order_status" value="1"><option value="2" <eq name="data.order_status" value="2">selected</eq> >已发货</option></eq>
+                <eq name="data.order_status" value="2"><option value="3" <eq name="data.order_status" value="3">selected</eq> >已签收</option></eq>
+                </select>
+            </eq>
+            
+        </p>
+
+        <p>
+            订单金额：【<font color="red">{twotree#$data.total_fee} （积分）</font>】
+        </p>
+        
+        <p>
+            下单时间：【{twotree#$data.order_time|date='Y-m-d H:i:s',###}】
+        </p>
+       <!-- <p>
+        快递单号：<input required name="express_no" class="text-input small-input" placeholder="快递单号"/>
+        </p>-->
+        <p>
+          <neq name="data.order_status" value="3">
+          <input type="submit" value="确认<eq name='data.order_status' value='1'>已发货</eq><eq name='data.order_status' value='2'>已签收</eq>" class="button">
+          </neq>
+        </p>
+            <legend>商品信息</legend>
+        <volist name="goods" id="item">
+            <hr/>
+            <p>
+                商品名称：【{twotree#$item.goods_name}】| 单价：【{twotree#$item.goods_price}】| 数量：【{twotree#$item.goods_nums}】
+                <a class="align-right" href="{twotree#:U('Jifen/edit',array('id'=>$item['goods_id']))}" target="_blank" title="查看商品">查看</a>
+                <span class='clear'></span>
+            </p>
+        </volist>
+            <hr/>
+            <legend>收货人信息</legend>
+        <p>
+            姓名：【{twotree#$data.consignee}】
+        </p>
+        <p>
+            手机：【{twotree#$data.mobile}】
+        </p>
+        <p>
+            地址：【{twotree#$data.province}-{twotree#$data.city}-{twotree#$data.district}-{twotree#$data.address}】
+        </p>
+      <div class="clear"></div>
+      </fieldset>
+    </form>
+</div>
+<!--kindeditor-->
+<link rel="stylesheet" href="/plugins/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="/plugins/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/plugins/kindeditor/lang/zh_CN.js"></script>
+<!--kindeditor-->
+<script>
+	KindEditor.ready(function(K) {
+		//初始化编辑器
+		var editor1 = K.create('textarea[name="content"]', {
+			cssPath : '/plugins/kindeditor/plugins/code/prettify.css',
+			uploadJson : '/plugins/kindeditor/php/upload_json.php',
+			fileManagerJson : '/plugins/kindeditor/php/file_manager_json.php',
+			allowFileManager : true,
+			afterCreate : function() {}
+		});
+		prettyPrint();
+	});
+	/*$(function() {
+		var editor = KindEditor.create('textarea[name="content"]');
+	});*/
+	//单图上传
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#image1').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url1').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url1').val(url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+	//批量上传图片
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#J_selectImage').click(function() {
+			editor.loadPlugin('multiimage', function() {
+				editor.plugin.multiImageDialog({
+					clickFn : function(urlList) {
+						var div = K('#J_imageView');
+						div.html('');
+						K.each(urlList, function(i, data) {
+							div.append('<img src="' + data.url + '">');
+						});
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+</script>
+</block>

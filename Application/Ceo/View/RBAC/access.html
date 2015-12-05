@@ -1,0 +1,59 @@
+<extend name="base" />
+<block name="content-title">
+<h4>配置权限</h4>  
+</block>
+<block name="content">
+	<script type='text/javascript'>
+$(function(){
+	$('input[level=1]').click(function(){
+		var inputs=$(this).parents('.app').find('input');
+		$(this).attr('checked') ? inputs.attr('checked','checked') : inputs.removeAttr('checked');
+	});
+	$('input[level=2]').click(function(){
+		var inputs=$(this).parents('dl').find('input');
+		$(this).attr('checked') ? inputs.attr('checked','checked') : inputs.removeAttr('checked');
+	});
+});
+</script>
+	<link rel='stylesheet' href='__PUBLIC__/Css/node.css'>
+          <div class="tab-content default-tab" id="tab1">
+            <table>
+              <tbody>
+              	<div id="wrap">
+              		<form action="{twotree#:U('setAccess')}" method='post'>
+<a href="{twotree#:U('role')}" class='button'>返回</a>&nbsp;&nbsp;&nbsp;
+<input type="submit" value='保存修改' class="button" />
+		
+		<volist name="node" id="app">
+			<div class='app'>
+				<p>
+					<strong>{twotree#$app['title']}</strong>
+					<input type="checkbox" name='access[]' value='{twotree#$app.id}_1' level='1' <if condition="$app['access']">checked='checked'</if>/>
+				</p>
+				<volist name="app.child" id="action">
+					<dl>
+						<dt>
+							<strong>{twotree#$action.title}</strong>
+							<input type='checkbox' name='access[]' value='{twotree#$action.id}_2' level='2' <if condition="$action['access']">checked='checked'</if>/>
+						</dt>
+						<volist name="action.child" id="method">
+							<dd>
+								<span>{twotree#$method.title}</span>
+								<input type='checkbox' name='access[]' value='{twotree#$method.id}_3' level='3' <if condition="$method['access']">checked='checked'</if>/>
+							</dd>
+						</volist>
+					</dl>
+					
+				</volist>
+			</div>		
+		
+		</volist>
+		<input type='hidden' name='rid' value='{twotree#$rid}'>
+	
+	</form>
+
+</div>
+              </tbody>             
+            </table>
+          </div> <!-- End #tab1 -->  
+</block>

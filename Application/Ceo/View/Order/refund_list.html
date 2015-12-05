@@ -1,0 +1,92 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>售后申请</h4>
+<!--<a style="float:right;margin:10px;" href="{twotree#:U('add')}" class="btn">添加</a> -->
+</block>
+<block name="content">
+    <style>
+        select,input[type='text']{border-radius:3px;padding: 3px 5px;border:1px solid #CCC}
+    </style>
+          <div class="tab-content default-tab" id="tab1">
+          
+            <div class="notification success png_bg" id="dmsg" style="display:none">
+              <a href="#" class="close"><img src="__PUBLIC__/Images/icons/cross_grey_small.png" title="Close this notification" alt="close" /></a>
+              <div>
+                订单提示！
+              </div>
+            </div>
+            
+            <table>
+              <thead>
+                <tr>
+                   <th><input class="check-all" type="checkbox" /></th>
+                   <th>订单编号</th>
+                   <th>申请类型</th>
+                   <th>收货人</th>
+                   <th>联系电话</th>
+                   <th>订单金额</th>
+                   <th>处理状态</th>
+                   <th>申请时间</th>
+                   <th>操作</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <volist name="list" id="v">
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>{twotree#$v['order']['order_sn']}</td>
+                  <td>
+                  <switch name="v.refund_type">
+                  	<case value='1'>退款</case>
+                    <case value='2'>退货</case>
+                    <case value='3'>换货</case>
+                  </switch>
+                  </td>
+                  <td>{twotree#$v['order']['consignee']}</td>
+                  <td>{twotree#$v['order']['mobile']}</td>
+                  <td><b>&yen; </b>{twotree#$v['order']['total_fee']}</td>
+                  <td>
+                  <a class="btn"><switch name="v.status" >
+                      <case value='0'><font color='red'>等待处理</font></case>
+                      <case value='1'>处理成功</case>
+                      <case value='2'>处理失败</case>
+                  </switch></a>
+                  </td>
+                  <td>{twotree#$v.posttime|date='Y-m-d H:i:s',###}</td>
+                  <td>
+                    <a class="btn btn-success" href="{twotree#:U('refund_detail',array('id'=>$v['id']))}">详情</a>
+                  </td>
+                </tr>
+                </volist>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="10">
+                    <div class="pagination">
+                      {twotree#$show}
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+                </tr>
+              </tfoot>              
+            </table>
+          </div> <!-- End #tab1 -->  
+<script type='text/javascript'>
+  $(function(){
+	  $("#btn-so").click(function(){
+		  var key=$("select[name='key'] option:selected").val();
+		  var val=$("input[name='val']").val();
+		  if(val==''){
+			  //alert('请输入关键字！')
+			  artDialog({content:'请输入关键字！', style:'alert', lock:false}, function(){});
+		  }else{
+			  location.href="{twotree#:U('index')}"+"&key="+key+'&val='+val;
+		  }
+		  
+	  });
+	  
+  })
+</script>
+</block>  

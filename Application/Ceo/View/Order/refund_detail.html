@@ -1,0 +1,216 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>订单详情</h4>
+ <a href="{twotree#:U('refund_list')}" style="margin:5px 10px;" class="btn align-right">返回列表</a>
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+    <form id="form" method="post" action="{twotree#:U('refund_handle',array('id'=>I('get.id')))}">
+        <fieldset>
+        <p>
+        <a class="btn">退款申请</a>
+        </p> 
+        <div class="block"> 
+        <p>
+        处理状态：<b><switch name='info.status'>
+            <case value="0"> 等待处理</case>
+            <case value="1">退款成功</case>
+            <case value="2">退款失败</case>
+        </switch></b>
+        </p> 
+        <p>申请类型：<b><switch name='info.refund_type'>
+            <case value="1">退款</case>
+            <case value="2">退货</case>
+            <case value="3">换货</case>
+        </switch></b>
+        </p>  
+        <p>申请理由：<!--<textarea readonly="readonly" class="v-middle"></textarea>-->{twotree#$info.reason}</p>
+        <p>申请时间：{twotree#$info.posttime|date='Y-m-d',###}</p>
+        <if condition="$info.status eq 0">
+            <p>处理结果：
+            <select name="status">
+            <option value="1">处理成功</option>
+            <option value="2">处理失败</option>
+            </select>
+            </p>
+            <p>
+            备注信息：<textarea class="v-middle" name="remark"></textarea></p>
+            </p>
+            <p><input type="submit" value="提 交" class="button"/></p>
+        <else/>
+             <p>处理结果：
+             <eq name="info.status" value="1">处理成功<else/>处理失败</eq>
+             </p>
+             <p>备注信息：
+             {twotree#$info.remark}
+             </p>
+             <p>操作员：
+             {twotree#$info.admin_user}
+             </p>
+        </if>
+        </div>
+        
+        <p><a class="btn">订单信息</a></p>     
+        <div class="block">     
+        <p>
+            订单ID：【{twotree#$data.id}】
+        </p>
+        <p>
+            订单编号：【{twotree#$data.order_sn}】
+        </p>
+        <p>
+            订单状态：
+            <b>
+            <eq name="data.order_status" value="3">
+            	<font color="green">已签收【交易完成】</font>
+            <else/>
+                <eq name="data.order_status" value="1">待发货</eq>
+                <eq name="data.order_status" value="2">已发货</eq>
+            </eq>
+            </b>
+        </p>
+        <p>
+            商品总价：【<font color="red"><b>&yen; </b>{twotree#$data.total_price}</font>】
+        </p>
+        <p>
+            订单金额：【<font color="red"><b>&yen; </b>{twotree#$data.total_fee}</font>】
+        </p>
+        
+        <p>
+            下单时间：【{twotree#$data.order_time|date='Y-m-d H:i:s',###}】
+        </p>
+        <p>
+            支付状态：【<eq name="data.pay_status" value="1"><font color="green">已支付</font><else/><font color="red">未支付</font></eq>】
+        </p>
+        <p>
+            支付方式：【<b style="color:green">
+           	<switch name="data.pay_way">
+            <case value='1'>微信支付</case>
+            <case value='2'>支付宝</case>
+            </switch></b>
+            】
+        </p>
+        <eq name="data.pay_status" value="1">
+            <p>
+                支付时间：【<neq name="data.pay_time" value="0">{twotree#$data.pay_time|date='Y-m-d H:i:s',###}</neq>】
+            </p>
+        </eq>
+        </div>
+        
+        <p><a class="btn">商品信息</a></p>    
+        <div class="block">    
+        <table>
+        <thead><tr><td>商品图片</td><td>商品名称</td><td>单价</td><td>数量</td><td>操作</td></tr></thead>
+        <volist name="order_goods" id="item">
+        	<tr>
+            	<td><img src="{twotree#$item.goods_spic}" class="thumb"/></td>
+                <td>{twotree#$item.goods_name}</td>
+                <td>{twotree#$item.goods_price}</td>
+                <td>{twotree#$item.goods_nums}</td>
+                <td><a  href="{twotree#:U('Goods/edit',array('id'=>$item['goods_id']))}" target="_blank" title="查看商品">查看</a>
+                </td>
+            </tr>
+        </volist>
+        </table>
+        </div>
+        
+       <p><a class="btn">下单人信息</a></p>    
+        <div class="block">    
+        <p>
+            账户名：【{twotree#$user.username|default='暂无'}】
+        </p>
+        <p>
+            昵称：【{twotree#$user.nickname|default='暂无'}】
+        </p>
+        <p>
+            角色：【
+            <switch name="user.role_id">
+            <case value="1">普通会员</case>
+            <case value="2">微店主</case>
+            <case value="3">分销商</case>
+            </switch>
+            】
+        </p>
+        </div>
+
+        <p><a class="btn">收货人信息</a></p>    
+        <div class="block">    
+        <p>
+            姓名：【{twotree#$data.consignee}】
+        </p>
+        <p>
+            手机：【{twotree#$data.mobile}】
+        </p>
+        <p>
+            地址：【{twotree#$data.province}-{twotree#$data.city}-{twotree#$data.district}-{twotree#$data.address}】
+        </p>
+        </div>
+        
+        
+        
+      <div class="clear"></div>
+      </fieldset>
+    </form>
+</div>
+<style>
+.block{border:1px dashed #ccc;padding:10px;border-radius:3px;-box-shadow:1px 1px 1px 1px #CCC;}
+</style>
+<!--kindeditor-->
+<link rel="stylesheet" href="/plugins/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="/plugins/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/plugins/kindeditor/lang/zh_CN.js"></script>
+<!--kindeditor-->
+<script>
+	KindEditor.ready(function(K) {
+		//初始化编辑器
+		var editor1 = K.create('textarea[name="content"]', {
+			cssPath : '/plugins/kindeditor/plugins/code/prettify.css',
+			uploadJson : '/plugins/kindeditor/php/upload_json.php',
+			fileManagerJson : '/plugins/kindeditor/php/file_manager_json.php',
+			allowFileManager : true,
+			afterCreate : function() {}
+		});
+		prettyPrint();
+	});
+	/*$(function() {
+		var editor = KindEditor.create('textarea[name="content"]');
+	});*/
+	//单图上传
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#image1').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url1').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url1').val(url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+	//批量上传图片
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#J_selectImage').click(function() {
+			editor.loadPlugin('multiimage', function() {
+				editor.plugin.multiImageDialog({
+					clickFn : function(urlList) {
+						var div = K('#J_imageView');
+						div.html('');
+						K.each(urlList, function(i, data) {
+							div.append('<img src="' + data.url + '">');
+						});
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+</script>
+</block>

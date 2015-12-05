@@ -1,0 +1,61 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>投诉反馈</h4> 
+<!--<a style="float:right;margin:10px;" href="{twotree#:U('add')}" class="btn">添加</a> -->
+</block>
+<block name="content">
+          <div class="tab-content default-tab" id="tab1">
+            <table width='100%'>
+              <thead>
+                <tr>
+                   <th>UID</th>
+                   <th>反馈类型</th>
+                   <th>内容</th>
+                   <th>邮箱</th>
+                   <th>手机</th>
+                   <th>提交时间</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <volist name="feedback" id="v">
+                    <tr>
+                      <td>【{twotree#$v.uid}】</td>	
+					  
+					  <td>
+	                      <eq name="v.type" value='1'>功能意见</eq>
+	                      <eq name="v.type" value='2'>页面意见</eq>
+	                      <eq name="v.type" value='3'>操作意见</eq>
+	                      <eq name="v.type" value='4'>其他</eq>
+                      </td>	
+					  <td>
+						  {twotree#$v.content}
+					  </td>
+					  <td>
+						  {twotree#$v.email}
+					  </td>
+					  <td>
+						  {twotree#$v.mobile}
+					  </td>
+                       <td>{twotree#$v.posttime|date='Y-m-d H:i:s',###}</td>
+                    </tr>
+                </volist>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="8">
+                    <div class="pagination">
+                      {twotree#$show}
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+                </tr>
+              </tfoot>              
+            </table>
+          </div> <!-- End #tab1 -->  
+<style>
+	select,input[type='text']{border-radius:3px;padding:3px 5px;border:1px solid #CCC}
+</style>          
+</block>  
+

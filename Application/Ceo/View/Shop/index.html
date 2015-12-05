@@ -1,0 +1,93 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+    <h4>店铺列表</h4>
+</block>
+<block name="content">
+    <div class="tab-content default-tab" id="tab1">
+        <p>
+            <form action="{:U('index')}" method="GET" style="display:inline;">
+                搜索：
+                <input value="{$Think.get.key}" name="key" type="text" class="text-input small-input" placeholder="关键字" /> &nbsp;&nbsp;
+                <input name="提交" type="submit" class="button" value="搜索" />
+            </form>
+			<a href="{:U('index')}">查看全部</a> &nbsp;&nbsp;&nbsp;店铺名称，微信昵称，姓名
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>店长姓名</th>
+                    <th>微信昵称</th>
+                    <th>店铺地址</th>
+                    <th>营业状态</th>
+                    <th>开店时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <volist name="list" id="v">
+                    <tr>
+                        <td>【{$v.shop_id}】</td>
+                        <td>{$v.name}</td>
+                        <td>{$v.nickname}</td>
+                        <td>
+                            【{$v.shop.prov} -{$v.shop.city} -{$v.shop.town} -{$v.shop.school}-{$v.shop.build}】
+                        </td>
+                        <td>
+                            <a class="btn">
+                                <switch name="v.shop.shop_status">
+                                    <case value="0"><font color="red">未营业</font></case>
+                                    <case value="1">营业中</case>
+                                </switch>
+                            </a>
+                        </td>
+                        <td>{$v.posttime|date='Y-m-d H:i:s',###}</td>
+                        <td>
+                            <a class="btn btn-success" href="{:U('shop_detail',array('id'=>$v['id']))}">查看</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="bulk-actions align-left">
+                        </div>
+                        <div class="pagination">
+                            {$show}
+                        </div>
+                        <div class="clear"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- End #tab1 -->
+</block>
+<SCRIPT src="__PUBLIC__/js/jquery.min.js" type=text/javascript></SCRIPT>
+<script type="text/javascript">
+    a
+    $(function() {
+        $('.del_shop').click(function() {
+            alert('dfdfs');
+        });
+    });
+
+    function del_shop(uid) {
+        $.ajax({
+            type: 'get',
+            url: "{:U('Ajax/edit_data')}",
+            data: {
+                'uid': uid
+            },
+            success: function(data) {
+                if (data.status) {
+                    alert('删除成功！');
+                    window.location.reload();
+                }
+            }
+        });
+    }
+</script>

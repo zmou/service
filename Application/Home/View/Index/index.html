@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>测试</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <script src="http://f.denver8.com/public/js/jquery-2.1.4.min.js"></script>
+    </head>
+    <body>
+        <a href="#/Home/Index/ajaxGetData" onclick="test(this);">点击</a>
+        <a href="#/Home/Index/ajaxGet2" onclick="test(this);">点击2</a>
+        <div>
+            <ul class="item-list"></ul>
+        </div>
+        <script type="text/javascript">
+            //alert(document.documentElement.innerHTML);
+            function test(obj) {
+                var url = $(obj).attr('href');
+                url = url.replace('#', '');
+                getHtml(url);
+            }
+            initialise();
+            function getUrl() {
+                var url = window.location.hash;
+                
+                if (url != '') {
+                    url = url.replace('#', '');
+                }
+                console.log(url);
+                return url;
+            }
+            
+            function initialise() {
+                var url = getUrl();
+                if (url != '') {
+                    getHtml(url);
+                }
+            }
+            
+            function getHtml(url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    dataType: 'html',
+                    data: {
+                        cat: 11
+                    },
+                    ifModified: true,
+                    timeout: 3600,
+                    success: function(data) {
+                        document.documentElement.innerHTML = data;
+                    },
+                    error: function() {
+                        alert('数据请求失败');
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

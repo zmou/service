@@ -1,0 +1,81 @@
+<extend name="RBAC:base" />
+<block name="content">
+    <div class="content-box column-left">
+        <div class="content-box-header">
+            <h4>店长统计</h4></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>店长总数：</th>
+                    <td>{$count_info.resaler_nums}</td>
+                    <td><a href="{:U('Resaler/index')}" class='button'>查看</a></td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="content-box column-right">
+        <div class="content-box-header">
+            <h4>代理统计</h4></div>
+        <table>
+            <tbody>
+                <tr>
+                    <th>代理商总数：</th>
+                    <td>{$count_info.shop_nums}</td>
+                    <td><a href="{:U('Shop/index')}" class='button'>查看</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="content-box column-left">
+        <div class="content-box-header">
+            <h4>今日订单量</h4></div>
+        <table>
+            <tbody>
+                <tr>
+                    <th>有效订单：</th>
+                    <th>{$count_info.order_total}</th>
+                </tr>
+                <tr>
+                    <th>已付款订单：</th>
+                    <th>{$count_info.pay_order_total}</th>
+                </tr>
+                <tr>
+                    <th>未付款订单：</th>
+                    <th>{$count_info.unpay_order_total}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-box column-right">
+        <div class="content-box-header">
+            <h4>商品信息</h4></div>
+        <table>
+            <tbody>
+                <tr>
+                    <th>在架商品：</th>
+                    <th>{$count_info.sale_goods_total}</th>
+                </tr>
+                <tr>
+                    <th>下架商品：</th>
+                    <th>{$count_info.unsale_goods_total}</th>
+                </tr>
+                <tr>
+                    <th>最新上架：</th>
+                    <th>{$count_info.new_goods_total}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clear"></div>
+    <script>
+        $(function() {
+            $("#main-box>.content-box-header").css('display', 'none');
+            $("#main-box").css("border-top", '1px');
+        });
+    </script>
+</block>

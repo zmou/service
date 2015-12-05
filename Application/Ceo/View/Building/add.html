@@ -1,0 +1,25 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+    <h3>新增</h3>
+    <a href="{:U('index',array('sch_id'=>I('get.sch_id')))}" class='btn align-right' style="margin:5px 10px;">返回</a>
+</block>
+<block name="content">
+    <div class="tab-content default-tab" id="tab1">
+        <form method="post" action="{:U('add')}" enctype="multipart/form-data">
+            <input type="hidden" name="sch_id" value="{$school.id}">
+            <fieldset>
+                <p>
+                    学　　校：{$school.name}
+                </p>
+                <p>
+                    宿舍楼号：
+                    <input class="text-input small-input" name="name" placeholder="学校名称" required/>
+                </p>
+                <p>
+                    <input type="submit" value="提交" class="button">
+                </p>
+            </fieldset>
+            <div class="clear"></div>
+        </form>
+    </div>
+</block>

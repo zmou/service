@@ -1,0 +1,24 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>新增服务商</h4>  
+<a style="margin:5px 10px;" href="{twotree#:U('index')}" class="btn align-right">返回</a> 
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+    <form method="post" action="{twotree#:U('insert')}">
+      <p>
+            账户名　：<input name="username"  class="text-input small-input" required placeholder="账户名"/>
+        </p>
+        <p>
+            账户密码：<input name="password"  class="text-input small-input" required placeholder="账户密码"/>
+        </p>            	         	
+        <p>
+            用户备注：<textarea class="textarea small-input v-middle" name="remark" cols="30" placeholder="备注信息"></textarea> 
+        </p>               
+        <p>
+          <input type="submit" value="  提 交  " class="button">
+        </p>
+      <div class="clear"></div>
+    </form>
+</div>
+</block>

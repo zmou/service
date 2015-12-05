@@ -1,0 +1,46 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+    <h4>宿舍楼列表</h4>
+    <a href="{:U('add',array('sch_id'=>$sch_id))}" style="float: right;font-weight: 700;margin:5px 10px;" class="btn">新增</a>
+</block>
+<block name="content">
+    <div class="tab-content default-tab" id="tab1">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>学校名称</th>
+                    <th>宿舍楼</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <volist name="list" id="v">
+                    <tr>
+                        <td>【{$v.id}】</td>
+                        <td>{$v.sch_name}</td>
+                        <td>{$v.name}</td>
+                        <td>
+                            <a class="btn btn-success" href="{:U('edit',array('id'=>$v['id']))}">修改</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <div class="bulk-actions align-left">
+                        </div>
+                        <div class="pagination">
+                            {$show}
+                        </div>
+                        <div class="clear"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- End #tab1 -->
+</block>

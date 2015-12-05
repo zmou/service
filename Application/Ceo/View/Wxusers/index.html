@@ -1,0 +1,175 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>会员列表</h4> 
+<!--<a style="float:right;margin:10px;" href="{twotree#:U('add')}" class="btn">添加</a> -->
+</block>
+<block name="content">
+          <div class="tab-content default-tab" id="tab1">
+           <p>
+                搜索：
+                <select name="key">
+                    <option value="username">账户名</option>
+                    <option value="nickname">昵称</option>    
+                    <option value="mobile">联系电话</option>    
+                </select>
+                <input value="{twotree#$Think.get.val}" name="val" type="text" class="text-input small-input" placeholder="关键字"/>
+                &nbsp;&nbsp;
+                注册时间：
+                <input value="{twotree#$Think.get.begin_time}" name="begin_time" type="text" class="text-input small-input" placeholder="起始时间" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/> ~
+                <input value="{twotree#$Think.get.end_time}" name="end_time" type="text" class="text-input small-input" placeholder="截止时间" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                <input id='btn-so' type="button" value="搜索" class="button"/>
+                &nbsp;&nbsp;&nbsp;
+                <a  href="{twotree#:U('index')}">查看全部</a>
+                &nbsp;&nbsp;&nbsp;
+            </p>
+            <table width='100%'>
+              <thead>
+                <tr>
+                   <th>UID</th>
+                   <th>用户类型</th>
+                   <th>头像</th>
+                   <!--<th>等级</th>-->
+                   <!--<th>所属角色</th>-->
+                   <th>昵称</th>
+                   <th>性别</th>
+                   <th>生日</th>
+                   <th>故乡</th>
+                   <th>收货地址</th>
+                   <th>邮箱</th>
+                   <th>手机</th>
+                   <th>收藏</th>
+                   <th>咕币</th>
+                   <th>爱好</th>
+                   <th>注册时间</th>
+                <!--   <th>升级分销商</th>-->
+                   <th>操作</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <volist name="wxuser" id="v">
+                    <tr>
+                      <td>【{twotree#$v.id}】</td>	
+					  
+					  <td>
+	                      <eq name="v.wechatid" value=''>                普通用户                      <else/>                      <a>微信用户</a>                  </eq>
+                      </td>	
+                      <td>
+                      <neq name="v.headimgurl" value="">
+                      <php>
+                      $picurl=base64_encode($v['headimgurl']);
+                      </php>
+                      <a rel="modal" title="查看原图" href="{twotree#:U('Index/show_img',array('picurl'=>$picurl))}" target="_blank"><img src="{twotree#$v.headimgurl}" class='thumb'></a></neq>
+                      </td>
+                      <!--<td>
+                      {twotree#$user_level[$v['user_level']]['title']}
+                      </td>
+                      <td>
+                      <switch name="v.role_id">
+                      	<case value="1">普通会员</case>
+                        <case value="2">微店店主</case>
+                        <case value="3">分销商</case>
+                      </switch>
+                      </td>-->
+                      <td>
+                      <a title="{twotree#$v.nickname}" href="{twotree#:U('edit',array('id'=>$v['id']))}" target="_blank">{twotree#$v.nickname|mb_substr=###,0,8,'utf-8'|default='暂无'}
+                      </a>
+                      </td>
+					  
+					  <td>
+	                      <eq name="v.sex" value='1'>男<else/>女</eq>
+                      </td>	
+					  <td>
+						  {twotree#$v.birthday}
+					  </td>
+					  <td>
+						  {twotree#$v.address}
+					  </td>
+					  <td>
+						  {twotree#$v.shipping_address}
+					  </td>
+					  <td>
+						  {twotree#$v.email}
+					  </td>
+					  <td>
+						  {twotree#$v.mobile}
+					  </td>
+					  <td>
+						  <a href="{twotree#:U('Goods/collection', array('uid'=>$v['id']))}">{twotree#$v.collection}</a>
+					  </td>
+					  <td>
+						  {twotree#$v.jifen}
+					  </td>
+					  <td>
+						  {twotree#$v.hobby}
+					  </td>
+
+                      <!--<td>{twotree#$v.wechatid}</td>
+                      <td>{twotree#$v.group_name}</td>-->
+                       <td>
+                      <eq name="v.posttime" value='0'>
+                      暂无
+                      <else/>{twotree#$v.posttime|date='Y-m-d H:i:s',###}
+                      </eq>
+                      </td>
+                      <!--<td><a class="btn confirm" href="{twotree#:U('upgrade_resaler',array('id'=>$v['id']))}">升级</a></td>-->
+                      <td>
+                       <!--  <a rel="modal" title="获取用户最新微信资料" class='btn' href="{twotree#:U('get_wxinfo',array('id'=>$v['id'],'p'=>I('get.p',1),'group_id'=>I('get.group_id')))}">更新资料</a>-->
+                         <a title="查看编辑用户信息" class='btn' href="{twotree#:U('edit',array('id'=>$v['id']))}">编辑</a>
+                         <neq name="v.username" value="">
+                         <a class='btn' href="{twotree#:U('pwd',array('id'=>$v['id']))}">修改密码</a>
+                         </neq>
+                        <!-- <a title="查看下线用户" target="_blank" class='btn' href="{twotree#:U('index',array('parent_id'=>$v['id']))}">下线用户</a>-->
+                         <!--<a title="删除用户"  class='btn btn-danger confirm' href="{twotree#:U('del',array('id'=>$v['id']))}">删除</a>-->
+                      </td>
+                    </tr>
+                </volist>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="8">
+                    <div class="pagination">
+                      {twotree#$show}
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+                </tr>
+              </tfoot>              
+            </table>
+          </div> <!-- End #tab1 -->  
+<style>
+	select,input[type='text']{border-radius:3px;padding:3px 5px;border:1px solid #CCC}
+</style>          
+<script>
+$(function(){
+	$("#btn-so").click(function(){
+		  var key=$("select[name='key'] option:selected").val();
+		  var val=$("input[name='val']").val();
+		  var begin_time=$("input[name='begin_time']").val();
+		  var end_time=$("input[name='end_time']").val();
+		  
+		  var param='';
+		  
+		  if(key!=''&&val!=''){
+			 param+="&key="+key+'&val='+val;
+		  }
+		  
+		  if(begin_time!=''){
+			   param+='&begin_time='+begin_time;
+		  }
+		  
+		  if(end_time!=''){
+			   param+='&end_time='+end_time;
+		  }
+		  
+		  if(param==''){
+			  //alert('请输入关键字！')
+			  artDialog({content:'请输入搜索条件！', style:'alert', lock:false}, function(){});
+		  }else{
+			  location.href="{twotree#:U('index')}"+param;
+		  }
+	});
+});
+</script>          
+</block>  

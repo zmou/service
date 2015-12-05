@@ -1,0 +1,71 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>服务商列表</h4> 
+<a style="margin:5px 10px;" href="{twotree#:U('add')}" class="btn align-right">新增</a> 
+</block>
+<block name="content">
+          <div class="tab-content default-tab" id="tab1">
+        <p>
+            <form action="" method="post">
+                搜索： <input value="{twotree#$Think.post.key}" name="key" type="text" class="text-input small-input" placeholder="关键字"/>
+                &nbsp;&nbsp;
+                
+                <input name="提交" type="submit" class="button" id='btn-so' value="搜索"/>
+                &nbsp;&nbsp;&nbsp;
+                <a  href="{twotree#:U('index')}">查看全部</a>
+                &nbsp;&nbsp;&nbsp;输入帐号搜索
+                </form>
+            </p>
+            <table width='100%'>
+              <thead>
+                <tr>
+                   <th>UID</th>
+                   <th>账户名</th>
+                   <th>服务区域</th>
+                   <th>开通时间</th>
+                   <th>账号状态</th>
+                   <th>操作</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <volist name="list" id="v">
+                    <tr>
+                      <td>【{twotree#$v.id}】</td>	
+                      <td>【{twotree#$v.username}】</td>	
+                      <td><a class="btn btn-success" href="{twotree#:U('area_edit',array('id'=>$v['id']))}">查看</a></td>
+                      <td>
+                     	{twotree#$v.posttime|date='Y-m-d H:i:s',###}
+                      </td>
+                      <td>
+                      <eq name="v.lock" value="0">
+                     	<a class="btn">正常</a>
+                        <else/>
+                        <a class="btn btn-danger">禁用</a>
+                        </eq>
+                      </td>
+                      <td>
+                      	 <a title="禁用或解禁" class='btn' href="{twotree#:U('lock',array('id'=>$v['id']))}">
+                         <eq name="v.lock" value="1">解禁<else/><font color='red'>禁用</font></eq>
+                         </a>
+                      
+                         <a title="查看编辑服务商信息" class='btn' href="{twotree#:U('edit',array('id'=>$v['id']))}">编辑</a>
+                         <a class='btn' href="{twotree#:U('pwd',array('id'=>$v['id']))}">修改密码</a>
+                      </td>
+                    </tr>
+                </volist>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="6">
+                    <div class="pagination">
+                      {twotree#$show}
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+                </tr>
+              </tfoot>              
+            </table>
+          </div> <!-- End #tab1 -->  
+</block>  

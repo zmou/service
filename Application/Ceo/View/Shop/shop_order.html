@@ -1,0 +1,345 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>订单管理</h4>
+<a style="margin:5px 10px;" href="{twotree#:U('export_excel')}" class="btn align-right">导出Excel</a> 
+</block>
+<block name="content">
+    <style>
+        select,input[type='text']{border-radius:3px;padding: 3px 5px;border:1px solid #CCC}
+    </style>
+          <div class="tab-content default-tab" id="tab1">
+          
+            <div class="notification success png_bg" id="dmsg" style="display:none">
+              <a href="#" class="close"><img src="__PUBLIC__/Images/icons/cross_grey_small.png" title="Close this notification" alt="close" /></a>
+              <div>
+                订单提示！
+              </div>
+            </div>
+            
+            
+			<!--area select order-->
+
+            <p>
+				<form action="/index.php?g=Admin&m=Shop&a=shop_order" id="search_form" method="post">
+                筛选：
+                <select name="province_id" id="province_id">
+                </select>
+                省
+				<select name="city_id" id="city_id">
+                </select>
+                市
+				<select name="district_id" id="district_id">
+                </select>
+                区
+
+				<select name="school_id" id="school_id">
+                </select>
+				<select name="build_id" id="build_id">
+                </select>
+
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				订单状态：
+				<select name="order_status" id="order_status">
+					<option value="1" selected>未发货</option>
+					<option value="3">已签收</option>
+
+                </select>
+				
+                <input id='search_btn' type="submit" value="确定" class="button"/>
+				</form>
+			</p>
+
+			<!--area select order end-->
+            <p>
+                搜索：
+                <select name="key">
+                    <option value="order_sn">订单编号</option>
+                    <option value="consignee">收货人</option>    
+                    <option value="mobile">联系电话</option>    
+                </select>
+                <input value="{twotree#$Think.get.val}" name="val" type="text" class="text-input small-input" placeholder="关键字"/>
+                
+                 下单时间：
+                <input value="{twotree#$Think.get.begin_time}" name="begin_time" type="text" class="text-input small-input" placeholder="起始时间" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/> ~
+                <input value="{twotree#$Think.get.end_time}" name="end_time" type="text" class="text-input small-input" placeholder="截止时间" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                
+                <input id='btn-so' type="button" value="搜索" class="button"/>
+                &nbsp;&nbsp;&nbsp;
+                <a  href="{twotree#:U('index')}">查看全部</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="btn <eq name='Think.get.order_status' value='1'>btn-danger</eq>" href="{twotree#:U('index',array('order_status'=>1))}">未发货</a>
+                <a class="btn <eq name='Think.get.order_status' value='2'>btn-success</eq>" href="{twotree#:U('index',array('order_status'=>2))}">已发货</a>
+                <a class="btn <eq name='Think.get.order_status' value='3'>btn-success</eq>" href="{twotree#:U('index',array('order_status'=>3))}">已签收</a>
+                
+            </p>
+            <table>
+              <thead>
+                <tr>
+                   <th><input class="check-all" type="checkbox" /></th>
+                   <th>订单编号</th>
+                   <th>收货人</th>
+                   <th>联系电话</th>
+                   <th>订单金额</th>
+                   <th>商品总价</th>
+                   <!--<th>客户确认</th>-->
+                   <th>订单状态</th>
+                   <th>支付状态</th>
+                   <th>下单时间</th>
+                   <th>操作</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <volist name="list" id="v">
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td><a title="点击查看" href="{twotree#:U('edit',array('id'=>$v['id']))}">{twotree#$v.order_sn}</a></td>
+                  <td>{twotree#$v.consignee}</td>
+                  <td>{twotree#$v.mobile}</td>
+                  <td><b>&yen; </b>{twotree#$v.total_fee}</td>
+                  <td><b>&yen; </b>{twotree#$v.total_price}</td>
+                  <!--<td><a class="btn"><eq name="v.is_confirm" value="1">已确认<else/><font color="red">未确认</font></eq></a></td>-->
+                  <td><a class="btn">{twotree#$v.order_status|order_status}</a></td>
+                  <td>
+                 <!-- <a class="btn" title="修改订单支付状态" href="{twotree#:U('update_pay_status',array('order_id'=>$v['id'],'p'=>I('get.p','1')))}">
+                  -->
+                  <a class='btn'>
+                  <eq name="v.pay_status" value="1">已支付<else/><font color="red">未支付</font></eq>
+                  </a></td>
+                  <td>{twotree#$v.order_time|date='Y-m-d H:i:s',###}</td>
+                  <td>
+                  	<!--<if condition="($v['fenyong_status'] eq 0) and ($v['shop_id'] gt 0)">
+                    <a class="btn" href="{twotree#:U('fenyong',array('id'=>$v['id']))}">分佣</a>
+                    </if>-->
+                  
+                    <a class="btn btn-success" href="{twotree#:U('order_detail',array('id'=>$v['id']))}">详情</a>
+                    <a class="btn btn-danger" href="{twotree#:U('export_shop_order',array('order_id'=>$v['id']))}">导出</a>
+                  </td>
+                </tr>
+                </volist>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="10">
+                    <div class="pagination">
+                      {twotree#$show}
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+                </tr>
+              </tfoot>              
+            </table>
+          </div> <!-- End #tab1 -->  
+<script type='text/javascript'>
+  $(function(){
+	  $("#btn-so").click(function(){
+		  
+		  var param='';
+		  
+		  var key=$("select[name='key'] option:selected").val();
+		  var val=$("input[name='val']").val();
+		  
+		  var begin_time=$("input[name='begin_time']").val();
+		  var end_time=$("input[name='end_time']").val();
+		  
+		 
+		  
+		  if(key!=''&&val!=''){
+			 param+="&key="+key+'&val='+val;
+		  }
+		  
+		  if(begin_time!=''){
+			   param+='&begin_time='+begin_time;
+		  }
+		  
+		  if(end_time!=''){
+			   param+='&end_time='+end_time;
+		  }
+		  
+		  if(param==''){
+			  alert('请输入搜索条件！')
+			  //artDialog({content:'请输入搜索条件！', style:'alert', lock:false}, function(){});
+		  }else{
+			  location.href="{twotree#:U('index')}"+param;
+		  }
+		  
+	  });
+	  
+  })
+
+
+	/*
+	   地区联动
+	   */
+var province_id = '{twotree#$map.province_id}';
+var city_id = '{twotree#$map.city_id}';
+var district_id = '{twotree#$map.district_id}';
+var school_id = '{twotree#$map.school_id}';
+var build_id = '{twotree#$map.build_id}';
+
+	$.post("index.php?g=Admin&m=Ajax&a=province",'',function(json){
+		var html='<option value="0">-请选择-</option>';
+		$.each(json,function(i,obj){
+				if(province_id == obj.id)
+				{
+					html+='<option value='+obj.id+' selected>'+obj.region_name+'</option>';
+				}
+				else
+				{
+					html+='<option value='+obj.id+'>'+obj.region_name+'</option>';	
+				}
+		});
+		$("#province_id").html(html);
+	},'json');
+
+if(province_id)
+{
+	
+		$.post("index.php?g=Admin&m=Ajax&a=city",{'parent_id':province_id},function(json){
+			var html='<option value="">-请选择-</option>';
+			$.each(json,function(i,obj){
+				if(city_id==obj.id)
+				{
+					html+='<option value='+obj.id+' selected>'+obj.region_name+'</option>';
+				}
+				else
+				{
+					html+='<option value='+obj.id+'>'+obj.region_name+'</option>';	
+				}
+			});
+			$("#city_id").html(html);
+		},'json');
+}
+if(city_id)
+{
+	
+		$.post("index.php?g=Admin&m=Ajax&a=district",{'parent_id':city_id},function(json){
+			var html='<option value="">-请选择-</option>';
+			$.each(json,function(i,obj){
+				if(district_id==obj.id)
+				{
+					html+='<option value='+obj.id+' selected>'+obj.region_name+'</option>';
+				}
+				else
+				{
+					html+='<option value='+obj.id+'>'+obj.region_name+'</option>';	
+				}
+			});
+			$("#district_id").html(html);
+		},'json');
+}
+if(district_id)
+{
+	
+		$.post("index.php?g=Admin&m=Ajax&a=school",{'county_id':district_id},function(json){
+			var html='<option value="">-请选择-</option>';
+			$.each(json,function(i,obj){
+				if(school_id==obj.id)
+				{
+					html+='<option value='+obj.id+' selected>'+obj.name+'</option>';
+				}
+				else
+				{
+					html+='<option value='+obj.id+'>'+obj.name+'</option>';	
+				}
+			});
+			$("#school_id").html(html);
+		},'json');
+}
+if(school_id)
+{
+	
+		$.post("index.php?g=Admin&m=Ajax&a=build",{'sch_id':school_id},function(json){
+			var html='<option value="">-请选择-</option>';
+			$.each(json,function(i,obj){
+				if(build_id==obj.id)
+				{
+					html+='<option value='+obj.id+' selected>'+obj.name+'</option>';
+				}
+				else
+				{
+					html+='<option value='+obj.id+'>'+obj.name+'</option>';	
+				}
+			});
+			$("#build_id").html(html);
+		},'json');
+}
+	$("#province_id").change(function(){
+		$.post("index.php?g=Admin&m=Ajax&a=city",{'parent_id':$(this).val()},function(json){
+			var html='<option value="">-请选择-</option>';
+			$.each(json,function(i,obj){
+				if(city_id==obj.id)
+				{
+					html+='<option value='+obj.id+' selected>'+obj.region_name+'</option>';
+				}
+				else
+				{
+					html+='<option value='+obj.id+'>'+obj.region_name+'</option>';	
+				}
+			});
+			$("#city_id").html(html);
+		},'json');
+	});
+
+	$("#city_id").change(function(){
+		$("#district").html('<option value="0">-区县-</option>');
+		$.post("index.php?g=Admin&m=Ajax&a=district",{'parent_id':$(this).val()},function(json){
+			var html='<option value="">-请选择-</option>';
+			$.each(json,function(i,obj){
+				html+='<option value='+obj.id+'>'+obj.region_name+'</option>';
+			});
+			$("#district_id").html(html);
+		},'json');
+	});
+
+$('#district_id').change(function(){
+	var county_id = $(this).val();
+	alert(county_id);
+	$.post("{twotree#:U('Ajax/school')}",{'county_id':county_id},function(data){
+		
+		school_str = "<option value='0'>请选择学校</option>";
+			if(!data)
+			{
+				alert('该区暂时无学校！');
+				
+				$('#school').html('');
+
+				return false;
+			}
+			for(i=0; i<data.length; i++)
+			{
+				build = data[i];
+				school_str += "<option value='"+build.id+"'>"+build.name+"</option>";			
+			}
+			//alert(build_str);
+			$('#school_id').html(school_str);
+		},'json');
+});
+
+$('#school_id').change(function(){
+	var school_id = $(this).val();
+	
+	$.post("{twotree#:U('Ajax/build')}",{'sch_id':school_id},function(data){
+		
+		build_str = "<option value='0'>请选择楼栋</option>";
+			if(!data)
+			{
+				alert('该学校暂时没有开放！');
+				
+				$('#build').html('');
+
+				return false;
+			}
+
+			for(i=0; i<data.length; i++)
+			{
+				build = data[i];
+				build_str += "<option value='"+build.id+"'>"+build.name+"</option>";			
+			}
+			//alert(build_str);
+			$('#build_id').html(build_str);
+		},'json');
+});
+</script>
+</block>  

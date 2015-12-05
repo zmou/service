@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>测试</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <script src="http://wechat.tumao.com/back/jquery-1.11.0.min.js"></script>
+    </head>
+    <body>
+        <div>444444444444</div>
+        <script type="text/javascript">
+            function getItemsByCat(cat, page) {
+            $.ajax({
+                url: '/Index/test',
+                type: 'GET',
+                async: false,
+                dataType: 'html',
+                data: {
+                    cat: 11
+                },
+                ifModified: true,
+                timeout: 3600,
+                success: function(data) {
+                    
+                },
+                error: function() {
+                    alert('数据请求失败');
+                }
+            });
+}
+        </script>
+    </body>
+</html>

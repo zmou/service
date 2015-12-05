@@ -1,0 +1,92 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>提现处理</h4>  
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+	<form method="post" action="{twotree#:U('edit',array('id'=>I('get.id')))}">
+		<fieldset>
+			<legend class="button">申请信息</legend>
+			<div class="block">
+				<p>
+				提现金额：<font color="red"><b>【&yen; {twotree#$info.money}】</b></font>
+				</p>      
+				<p>
+				提现类型：【{twotree#$info.pay_type}】
+				</p>      
+				<p>
+				申请时间：【{twotree#$info.apply_time|date='Y-m-d H:i:s',###}】
+				</p>  
+				<p>
+				账户名：【{twotree#$info.true_name}】
+				</p>  
+				<p>
+				支付宝账号 ：【{twotree#$info.alipay}】
+				</p>  
+				<p>
+				银行卡号：【{twotree#$info.bank_card}】
+				</p> 
+				<p>
+				开户银行：【{twotree#$info.bank_name}】
+				</p>    
+				<p>
+				银行所属地：【{twotree#$info.province}-{twotree#$info.city}】
+				</p>  
+				<p>
+				手机：【{twotree#$info.mobile}】
+				</p>
+
+				<neq name="info.status" value='0'>
+				<p>
+				处理结果：<b>{twotree#$info.status|apply_status}</b>
+				</p> 
+				<p>
+				处理时间：【{twotree#$info.handle_time|date='Y-m-d H:i:s',###}】
+				</p>
+				<else/>
+				<p>
+				处理结果：<select name="status">
+					<option value='1' <eq name="info.status" value="1">selected</eq>>提现成功</option>
+					<option value='2' <eq name="info.status" value="2">selected</eq>>提现失败</option>
+				</select>
+				</p> 
+				</neq>  
+			</div>
+			<br/>
+			<legend class="button">用户账户信息</legend>
+			<div class="block">
+				<p>用户名　：【{twotree#$user.name}】</p>
+				<p>OPENID　：【{twotree#$user.wechatid}】</p>
+				<p><font color="red"><b> 账户资金：【&yen; {twotree#$user['money_account']+$user['money_dongjie']}】</b></font></p> 
+				<p>身份证　：【{twotree#$user.id_card}】</p>
+				<p>地址　：【{twotree#$user.province}-{twotree#$user.city}-{twotree#$user.town}】</p>
+				<p>收货地址　：【{twotree#$user.shipping_address}】</p>
+				<p>微信昵称　：【{twotree#$user.nickname}】</p>
+				<p>头像　：<br>
+				<img src="{twotree#$user.headimgurl}" width="100" height="100"/>
+				</p>
+
+			</div>
+
+			<p>
+			<eq name="info.status" value="0">
+			备注信息：<input name="remark" type='text' class="text-input small-input" placeholder="失败原因或成功备注"/>
+			</eq>
+			<eq name="info.status" value="1">
+			备注信息：{twotree#$info.remark}
+			</eq>
+			<eq name="info.status" value="2">
+			失败原因：{twotree#$info.remark}
+			</eq>
+			</p> 
+			<p>
+			<eq name="info.status" value="0">
+			<input type="submit" value="提 交" class="button">
+			</eq>
+			<a href="{twotree#:U('index')}" class='btn'>返回</a>
+			</p>
+		</fieldset>
+		<div class="clear"></div>
+	</form>
+</div>
+</block>

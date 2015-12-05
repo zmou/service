@@ -1,0 +1,64 @@
+<div id="sidebar">
+    <div id="sidebar-wrapper">
+        <!-- Sidebar with logo and menu -->
+        <h1 id="sidebar-title"><a href="#">奥克斯</a></h1>
+        
+        <!-- Sidebar Profile links -->
+        <div id="profile-links">
+            <br />
+            <br />
+            <a href="{:U('Index/index')}" title="管理中心">管理中心</a> |
+            <a href="{:U('Login/logout')}" title="退 出">退 出</a>
+        </div>
+
+        <ul id="main-nav">
+            <li>
+                <a href="#" class="nav-top-item">订单管理</a>
+                <ul class="dlink">
+                    <li><a href="/Ceo/Order/index">学生订单</a></li>
+                    <li><a href="/Ceo/Order/shop_order">店长订单</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="nav-top-item">店长管理</a>
+                <ul class="dlink">
+                    <li><a href="{:U('Shop/index')}">店长列表</a></li>
+                    <li><a href="{:U('Shop/audit')}">店铺申请</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="nav-top-item">学校管理</a>
+                <ul class="dlink">
+                    <li><a href="{:U('School/index')}">学校列表</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="nav-top-item">账户管理</a>
+                <ul class="dlink">
+                    <li><a href="{:U('Account/index')}">个人资料</a></li>
+                    <li><a href="{:U('Account/withdrawDeposit')}">提现申请</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!-- End #main-nav -->
+
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var url = window.location.search;
+            $('#main-nav li ul li a').each(function() {
+                var aurl = '?' + $(this).attr("href").split("?")[1];
+                var pul = $(this).parent().parent().prev();
+                var tul = $(this).parent().parent().parent();
+                if (aurl.indexOf(url) >= 0) {
+                    $(this).addClass("current").siblings("a").removeClass("current");
+                    $(".nav-top-item").removeClass("current");
+                    pul.addClass("current");
+                    $(".dlink").css("display", "none");
+                    $(this).parent().parent().css("display", "block");
+                }
+            });
+        });
+    </script>
+</div>
+<!-- End #sidebar -->

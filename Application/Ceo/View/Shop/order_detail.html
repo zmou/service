@@ -1,0 +1,266 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>订单详情</h4>
+ <a href="{twotree#:U('index')}" style="margin:5px 10px;" class="btn align-right">返回列表</a>
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+    <form id="form" method="post" action="{twotree#:U('edit',array('id'=>$data['id']))}">
+        <fieldset>
+        <p><a class="button">订单信息</a></p>     
+        <div class="block">     
+        <p>
+            订单ID：【{twotree#$data.id}】
+        </p>
+        <p>
+            订单编号：【{twotree#$data.order_sn}】
+        </p>
+        <p>
+            订单状态：
+            <!--<eq name="data.order_status" value="3">
+            <font color="green">已签收【交易完成】</font>
+            <else/>
+                <select name="order_status">
+                <eq name="data.order_status" value="1"><option value="2" <eq name="data.order_status" value="2">selected</eq> >已发货</option></eq>
+                <eq name="data.order_status" value="2"><option value="3" <eq name="data.order_status" value="3">selected</eq> >已签收</option></eq>
+                </select>
+            </eq>-->
+            <b>{twotree#$data.order_status|order_status}</b>
+            
+        </p>
+        <p>
+            商品总价：【<font color="red"><b>&yen; </b>{twotree#$data.total_price}</font>】
+        </p>
+        <p>
+            订单金额：【<font color="red"><b>&yen; </b>{twotree#$data.total_fee}</font>】
+        </p>
+        
+        <p>
+            下单时间：【{twotree#$data.order_time|date='Y-m-d H:i:s',###}】
+        </p>
+        <p>
+            支付状态：【
+            <switch name="data.pay_status">
+            	<case value='0'><font style="color:red">未支付</font></case>
+                <case value='1'><font style="color:green;font-weight:700">已支付</font></case>
+                <case value='2'><font style="color:red">申请退款</font></case>
+                <case value='3'><font style="color:green;font-weight:700">退款成功</font></case>
+            </switch>
+            】
+        </p>
+        <p>
+            支付方式：【<b style="color:green">
+           	<switch name="data.pay_way">
+            <case value='1'>微信支付</case>
+            <case value='2'>支付宝</case>
+            <case value='3'>银联支付</case>
+            </switch></b>
+            】
+        </p>
+        <eq name="data.pay_status" value="1">
+            <p>
+                支付时间：【<neq name="data.pay_time" value="0">{twotree#$data.pay_time|date='Y-m-d H:i:s',###}</neq>】
+            </p>
+        </eq>
+        
+        <neq name="data.remark1" value="">
+            <p>
+                发货备注：【{twotree#$data.remark1}】
+            </p>
+        </neq>
+        
+        <neq name="data.remark2" value="">
+            <p>
+                签收备注：【{twotree#$data.remark2}】
+            </p>
+        </neq>
+       
+        <!--<p>
+        快递单号：<input required name="express_no" class="text-input small-input" placeholder="快递单号"/>
+        </p>
+        <p>
+          <neq name="data.order_status" value="3">
+          <input type="submit" value="确认<eq name='data.order_status' value='1'>已发货</eq><eq name='data.order_status' value='2'>已签收</eq>" class="button">
+          </neq>
+        </p>-->
+        </div>
+        
+        <if condition="$data['shop_id'] gt 0" >
+        
+        <p><a class="button">分佣信息</a></p>  
+        <div class="block">    
+       	<p>
+            分佣状态：<eq name="data.fenyong_status" value="1">
+            <font color='green'>已分佣</font>
+            <else/>
+            <font color="red">未分佣</font>
+            </eq>
+        </p>
+        <table>
+        <thead><tr><td>账户信息</td><td>分销等级</td><td>佣金比例</td><td>佣金</td></tr></thead>
+        <if condition="!empty($resaler1)">
+        <tr>
+            <td>{twotree#$resaler1.username}</td>
+            <td>一级分销</td>
+            <td>{twotree#$resaler1.percent} %</td>
+            <td>&yen;{twotree#$resaler1.yongjin}</td>
+            </td>
+        </tr>
+        </if>
+        <if condition="!empty($resaler2)">
+         <tr>
+            <td>{twotree#$resaler2.username}</td>
+            <td>二级分销</td>
+            <td>{twotree#$resaler2.percent}%</td>
+            <td>&yen;{twotree#$resaler2.yongjin}</td>
+            </td>
+        </tr>
+        </if>
+        </table>
+        </div>  
+        
+        </if>
+        
+        <p><a class="button">商品信息</a></p>    
+        <div class="block">    
+        <table>
+        <thead><tr><td>商品图片</td><td>商品名称</td><td>单价</td><td>数量</td><td>操作</td></tr></thead>
+        <volist name="order_goods" id="item">
+        	<tr>
+            	<td><img src="{twotree#$item.goods_spic}" class="thumb"/></td>
+                <td>{twotree#$item.goods_name}</td>
+                <td>{twotree#$item.goods_price}</td>
+                <td>{twotree#$item.goods_nums}</td>
+                <td><a  href="{twotree#:U('Goods/edit',array('id'=>$item['goods_id']))}" target="_blank" title="查看商品">查看</a>
+                </td>
+            </tr>
+        </volist>
+        </table>
+        </div>
+<!--
+            <legend>物流信息</legend>
+        <div class="block">
+        <p>
+            配送方式：【
+            <eq name="data.express_name" value="">
+            不限
+            <else/>
+            {twotree#$data.express_name}
+            </eq>
+            】
+        </p> 
+         <p>
+             快递费用：【&yen; {twotree#$data.express_fee}】
+        </p>    
+       </div>
+       -->
+       
+       <p><a class="button">下单人信息</a></p>    
+        <div class="block">    
+        <p>
+            账户名：【{twotree#$user.username}】
+        </p>
+        <p>
+            昵称：【{twotree#$user.nickname}】
+        </p>
+        <p>
+            角色：【
+            <switch name="user.role_id">
+            <case value="1">普通会员</case>
+            <case value="2">微店主</case>
+            <case value="3">分销商</case>
+            </switch>
+            】
+        </p>
+        </div>
+       
+       
+        <p><a class="button">收货人信息</a></p>    
+        <div class="block">    
+        <p>
+            姓名：【{twotree#$data.consignee}】
+        </p>
+        <p>
+            手机：【{twotree#$data.mobile}】
+        </p>
+        <p>
+            地址：【{twotree#$data.province}-{twotree#$data.city}-{twotree#$data.district}-{twotree#$data.address}】
+        </p>
+        </div>
+        
+        <neq name="data.shop_id" value='0'>
+        <p><a class="button">店铺信息</a></p>
+        <div class="block">
+        <p>
+            店铺名称：【{twotree#$shop.shop_name}】
+        </p>
+        </div>
+        </neq>
+        
+        
+      <div class="clear"></div>
+      </fieldset>
+    </form>
+</div>
+<style>
+.block{border:1px dashed #ccc;padding:10px;border-radius:3px;-box-shadow:1px 1px 1px 1px #CCC;}
+</style>
+<!--kindeditor-->
+<link rel="stylesheet" href="/plugins/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="/plugins/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/plugins/kindeditor/lang/zh_CN.js"></script>
+<!--kindeditor-->
+<script>
+	KindEditor.ready(function(K) {
+		//初始化编辑器
+		var editor1 = K.create('textarea[name="content"]', {
+			cssPath : '/plugins/kindeditor/plugins/code/prettify.css',
+			uploadJson : '/plugins/kindeditor/php/upload_json.php',
+			fileManagerJson : '/plugins/kindeditor/php/file_manager_json.php',
+			allowFileManager : true,
+			afterCreate : function() {}
+		});
+		prettyPrint();
+	});
+	/*$(function() {
+		var editor = KindEditor.create('textarea[name="content"]');
+	});*/
+	//单图上传
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#image1').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url1').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url1').val(url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+	//批量上传图片
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#J_selectImage').click(function() {
+			editor.loadPlugin('multiimage', function() {
+				editor.plugin.multiImageDialog({
+					clickFn : function(urlList) {
+						var div = K('#J_imageView');
+						div.html('');
+						K.each(urlList, function(i, data) {
+							div.append('<img src="' + data.url + '">');
+						});
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+</script>
+</block>

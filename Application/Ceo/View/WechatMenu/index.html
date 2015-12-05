@@ -1,0 +1,61 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>公众号菜单设置</h4>  
+</block>
+<block name="content">
+          <div class="tab-content default-tab" id="tab1">
+            <div class="notification success png_bg" id="dmsg" style="display:;">
+              <a href="#" class="close"><img src="__PUBLIC__/Images/icons/cross_grey_small.png" title="Close this notification" alt="close" /></a>
+              <div>
+                公众号菜单设置
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                   <th>菜单ID</th>
+                   <th>菜单标题</th>
+                   <th>菜单类型</th>
+                   <th>菜单键值</th>
+                   <th>菜单排序</th>
+                   <th>操作</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <volist name="plist" id="v">
+                    <tr>
+                      <td>【{twotree#$v.id}】</td>
+                      <td><if condition="$v['fup'] eq 0">⊙<else/>┠</if>&nbsp;<a href="#" title="title">{twotree#$v.name}</a></td>
+                      <td><if condition="$v['type'] eq 0">按钮(click)<else/>链接(view)</if></td>
+                      <td>{twotree#$v.key}</td>
+                      <td>{twotree#$v.list}</td>
+                      <td>
+						<a class="btn btn-success" href="{twotree#:U('menuadd',array('id'=>$v['id']))}" title="Edit">编辑</a>
+                    	
+                         <a class="btn btn-danger" href="{twotree#:U('menudel',array('id'=>$v['id']))}" onClick="return confirm('是否将此菜单删除?')" title="Delete">删除</a> 
+                      </td>
+                    </tr>
+                </volist>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="6">
+                    <div class="bulk-actions align-left">
+                    <a class="button" href="{twotree#:U('menuadd')}">添加菜单</a>&nbsp;&nbsp;&nbsp;
+                    <a class="button" href="{twotree#:U('menusend')}" rel="modal">生成菜单</a>&nbsp;&nbsp;&nbsp;
+                    <a class="button" href="{twotree#:U('menuget')}" rel="modal">查看当前菜单</a>&nbsp;&nbsp;&nbsp;
+                    <a class="button" href="https://mp.weixin.qq.com/debug" target="_blank">微信接口调试地址</a>&nbsp;&nbsp;&nbsp;
+                    
+                    </div>
+                    <div class="pagination">
+
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+                </tr>
+              </tfoot>              
+            </table>
+      </div>
+</block>  

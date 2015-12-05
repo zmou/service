@@ -1,0 +1,163 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+<h4>系统信息设置</h4>  
+</block>
+<block name="content">
+<div class="tab-content default-tab" id="tab1">
+            <form method="post" action="{twotree#:U('index')}">
+             	<p>
+                   网站标题　　：<input type="text" name="web_name"  class="text-input small-input" value="{twotree#$conf.web_name}"> 
+                </p>
+                <p>
+                   网站描述　　：<input type="text" name="web_descrip"  class="text-input medium-input" value="{twotree#$conf.web_descrip}"> 
+                </p>
+                <p>
+                   网站关键字　：<input type="text" name="web_key"  class="text-input medium-input" value="{twotree#$conf.web_key}"> 
+                </p>             
+                <p>
+                   网站备案号　：<input type="text" name="web_beian"  class="text-input small-input" value="{twotree#$conf.web_beian}"> 
+                </p>      
+                 <p>
+                   联系电话　　：<input type="text" name="phone"  class="text-input small-input" value="{twotree#$conf.phone}"> 
+                </p>        
+                <p>
+                   电子邮箱　　：<input type="text" name="email"  class="text-input small-input" value="{twotree#$conf.email}"> 
+                </p>   
+				<p>
+                   版权信息　　：<input type="text" name="copyright"  class="text-input small-input" value="{twotree#$conf.copyright}"> 
+                </p>
+				<br>
+				<br>   
+				<p>
+				微信分享说明　　：<textarea name="share_message"  class="text-input small-input">{twotree#$conf.share_message}</textarea>
+                </p>
+				<p>
+				商店公告　　：<textarea name="shop_notice"  class="text-input small-input">{twotree#$conf.shop_notice}</textarea>
+                </p>
+				<p>
+				暂停营业　　：<textarea name="close_desc"  class="text-input small-input">{twotree#$conf.close_desc}</textarea>
+                </p>
+                <p>
+                   营业时间　　：<input type="text" name="open_time"  class="text-input small-input" value="{twotree#$conf.open_time}"> 
+                </p>   
+                <p>
+                   店长专线　　：<input type="text" name="shop_hot_line"  class="text-input small-input" value="{twotree#$conf.shop_hot_line}"> 
+                </p>   
+                <p>
+                   申请店长成功　　：<input type="text" name="apply_success"  class="text-input small-input" value="{twotree#$conf.apply_success}"> 
+                </p>   
+                <p>
+                   用户最小金额　　：<input type="text" name="user_min_amount"  class="text-input small-input" value="{twotree#$conf.user_min_amount}"> 
+                </p>   
+                <p>
+                   店长最小金额　　：<input type="text" name="shop_min_amount"  class="text-input small-input" value="{twotree#$conf.shop_min_amount}"> 
+                </p>   
+            
+				
+                <p>
+                   最低提现金额　　：<input type="text" name="min_withdraw_money"  class="text-input small-input" value="{twotree#$conf.min_withdraw_money}">
+                </p>   
+                <p>
+				提现说明　　：<textarea name="withdraw_desc"  class="editor" style="height:200px;">{twotree#$conf.withdraw_desc}</textarea>
+                </p>   
+               <p>
+                  <input type="submit" value="保存设置" class="button">
+                </p>
+              <div class="clear"></div>
+            </form>
+</div>
+<!--kindeditor-->
+<link rel="stylesheet" href="/plugins/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="/plugins/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/plugins/kindeditor/lang/zh_CN.js"></script>
+<!--kindeditor-->
+<script>
+	$(function(){
+		$(".num").keyup(function(){
+			if(isNaN($(this).val())){
+				$(this).val('');
+			}
+		});		  
+	});
+	KindEditor.ready(function(K) {
+		//初始化编辑器
+		var editor1 = K.create('.editor', {
+			cssPath : '/plugins/kindeditor/plugins/code/prettify.css',
+			uploadJson : '/plugins/kindeditor/php/upload_json.php',
+			fileManagerJson : '/plugins/kindeditor/php/file_manager_json.php',
+			allowFileManager : true,
+			afterCreate : function() {}
+		});
+		prettyPrint();
+	});
+	/*$(function() {
+		var editor = KindEditor.create('textarea[name="content"]');
+	});*/
+	//单图上传
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#image1').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url1').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url1').val(url);
+						//var img = url.replace(/(\*)\./,"thumb_$1"); 
+						K('#thumb').attr('src',url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+		K('#image2').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url2').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url2').val(url);
+						//var img = url.replace(/(\*)\./,"thumb_$1"); 
+						K('#thumb2').attr('src',url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+		K('#image3').click(function() {
+			editor.loadPlugin('image', function() {
+				editor.plugin.imageDialog({
+					imageUrl : K('#url3').val(),
+					clickFn : function(url, title, width, height, border, align) {
+						K('#url3').val(url);
+						//var img = url.replace(/(\*)\./,"thumb_$1"); 
+						K('#thumb3').attr('src',url);
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+	//批量上传图片
+	KindEditor.ready(function(K) {
+		var editor = K.editor({
+			allowFileManager : true
+		});
+		K('#J_selectImage').click(function() {
+			editor.loadPlugin('multiimage', function() {
+				editor.plugin.multiImageDialog({
+					clickFn : function(urlList) {
+						var div = K('#J_imageView');
+						div.html('');
+						K.each(urlList, function(i, data) {
+							div.append('<img src="' + data.url + '">');
+						});
+						editor.hideDialog();
+					}
+				});
+			});
+		});
+	});
+</script>
+</block>
+

@@ -1,0 +1,142 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+    <h4>个人信息设置</h4>
+</block>
+<!--uploadify-->
+<script src="/plugins/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" >
+<!--uploadify-->
+<block name="content">
+    <div class="tab-content default-tab" id="tab1">
+        <form method="post" action="{:U('updateAccount')}" enctype="multipart/form-data">
+            <p>
+                <span style="display:inline-block;width:100px;">姓名：</span>
+                <input type="text" name="real_name" class="text-input small-input" value="{$ceoInfo.real_name}">
+            </p>
+            <p>
+                <span style="display:inline-block;width:100px;">手机：</span>
+                <input type="text" name="mobile" class="text-input small-input" value="{$ceoInfo.mobile}">
+            </p>
+            <p>
+                <span style="display:inline-block;width:100px;">电子邮箱：</span>
+                <input type="text" name="email" class="text-input small-input" value="{$ceoInfo.email}">
+            </p>
+            <p>
+                <span style="display:inline-block;width:100px;">身份证：</span>
+                <input type="text" name="id_card" class="text-input small-input" value="{$ceoInfo.id_card}">
+            </p>
+            <p>
+                <span style="display:inline-block;width:100px;">学生证：</span>
+                <input name="student_card" type="hidden" id="url1" class="text-input small-input" value="{$ceoInfo.student_card}"/>
+                <?php if ( !empty($ceoInfo['student_card']) ) : ?>
+                    <img height="300" src="__ROOT__{$ceoInfo.student_card}">
+                <?php else: ?>
+                    <input type="button" id="image1" value="选择图片" class="button"/>
+                    <font style="color:red">&nbsp;【图片大小不能超过1M】</font>
+                <?php endif; ?>
+            </p>
+            <p>
+                <span style="display:inline-block;width:100px;">就职时间：</span>
+                <input type="text" readonly="readonly" name="take_office_time" class="text-input small-input" value="{$ceoInfo.take_office_time}">
+            </p>
+            <p>
+                <span style="display:inline-block;width:100px;">收货地址：</span>
+                <input type="text" name="receiving_address" class="text-input small-input" value="{$ceoInfo.receiving_address}">
+            </p>
+            <p>
+                <input type="submit" value="保存设置" class="button">
+            </p>
+            <div class="clear"></div>
+        </form>
+    </div>
+    <!--kindeditor-->
+    <link rel="stylesheet" href="/plugins/kindeditor/themes/default/default.css" />
+    <script charset="utf-8" src="/plugins/kindeditor/kindeditor-min.js"></script>
+    <script charset="utf-8" src="/plugins/kindeditor/lang/zh_CN.js"></script>
+    <!--kindeditor-->
+    <script>
+        $(function() {
+            $(".num").keyup(function() {
+                if (isNaN($(this).val())) {
+                    $(this).val('');
+                }
+            });
+        });
+        KindEditor.ready(function(K) {
+            //初始化编辑器
+            var editor1 = K.create('.editor', {
+                cssPath: '/plugins/kindeditor/plugins/code/prettify.css',
+                uploadJson: '/plugins/kindeditor/php/upload_json.php',
+                fileManagerJson: '/plugins/kindeditor/php/file_manager_json.php',
+                allowFileManager: true,
+                afterCreate: function() {}
+            });
+            prettyPrint();
+        });
+        
+        //单图上传
+        KindEditor.ready(function(K) {
+            var editor = K.editor({
+                allowFileManager: true
+            });
+            K('#image1').click(function() {
+                editor.loadPlugin('image', function() {
+                    editor.plugin.imageDialog({
+                        imageUrl: K('#url1').val(),
+                        clickFn: function(url, title, width, height, border, align) {
+                            K('#url1').val(url);
+                            K('#thumb').attr('src', url);
+                            editor.hideDialog();
+                        }
+                    });
+                });
+            });
+            K('#image2').click(function() {
+                editor.loadPlugin('image', function() {
+                    editor.plugin.imageDialog({
+                        imageUrl: K('#url2').val(),
+                        clickFn: function(url, title, width, height, border, align) {
+                            K('#url2').val(url);
+                            //var img = url.replace(/(\*)\./,"thumb_$1"); 
+                            K('#thumb2').attr('src', url);
+                            editor.hideDialog();
+                        }
+                    });
+                });
+            });
+            K('#image3').click(function() {
+                editor.loadPlugin('image', function() {
+                    editor.plugin.imageDialog({
+                        imageUrl: K('#url3').val(),
+                        clickFn: function(url, title, width, height, border, align) {
+                            K('#url3').val(url);
+                            //var img = url.replace(/(\*)\./,"thumb_$1"); 
+                            K('#thumb3').attr('src', url);
+                            editor.hideDialog();
+                        }
+                    });
+                });
+            });
+        });
+        //批量上传图片
+        KindEditor.ready(function(K) {
+            var editor = K.editor({
+                allowFileManager: true
+            });
+            K('#J_selectImage').click(function() {
+                editor.loadPlugin('multiimage', function() {
+                    editor.plugin.multiImageDialog({
+                        clickFn: function(urlList) {
+                            var div = K('#J_imageView');
+                            div.html('');
+                            K.each(urlList, function(i, data) {
+                                div.append('<img src="' + data.url + '">');
+                            });
+                            editor.hideDialog();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</block>

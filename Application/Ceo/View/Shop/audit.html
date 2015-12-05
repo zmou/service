@@ -1,0 +1,55 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+    <h4>待审核店铺</h4>
+</block>
+<block name="content">
+    <div class="tab-content default-tab" id="tab1">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>手机</th>
+                    <th>性别</th>
+                    <th>店铺位置</th>
+                    <th>审核状态</th>
+                    <th>申请时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="v">
+                    <tr>
+                        <td>【{$v.id}】</td>
+                        <td>{$v.user.name}</td>
+                        <td>{$v.user.mobile}</td>
+                        <td>
+                            <eq name="v.sex" value="1">男
+                                <else/>女</eq>
+                        </td>
+                        <td>【{$v.city}】-【{$v.county}】-【{$v.school}】-【{$v.build}】</td>
+                        <td><a class="btn"><font color="red">等待审核</font></a></td>
+                        <td>{$v.posttime|date='Y-m-d H:i:s',###}</td>
+                        <td>
+                            <a class="btn btn-success" onclick="return confirm('确定要开通此店铺？')" href="{:U('set_account',array('id'=>$v['uid']))}">开通</a>
+                            <a class="btn btn-danger" onclick="return confirm('确定删除？')" href="{:U('del',array('uid'=>$v['uid']))}" id="{twotree#$v.id}">删除</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <div class="bulk-actions align-left">
+                        </div>
+                        <div class="pagination">
+                            {$show}
+                        </div>
+                        <div class="clear"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- End #tab1 -->
+</block>

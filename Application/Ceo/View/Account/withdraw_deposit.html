@@ -1,0 +1,77 @@
+<extend name="RBAC:base" />
+<block name="content-title">
+    <h4>申请提现</h4>
+</block>
+<block name="content">
+    <div class="tab-content default-tab" id="tab1">
+        <form method="post" action="{:U('doWithdrawDeposit')}" onsubmit="return check();">
+            <fieldset>
+                <legend class="button">用户账户信息</legend>
+                <div class="block">
+                    <p>用 户 名：{$user.username}</p>
+                    <p>姓    名：{$user.real_name}</p>
+                    <p><font color="red"><b>账户资金：&yen; {$availableFee}</b></font></p>
+                    <p>身 份 证：{$user.id_card}</p>
+                </div>
+                <legend class="button">申请提现</legend>
+                <div class="block">
+                    <p>
+                        提现金额：
+                        <input type="text" name="money" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="text-input small-input" >
+                    </p>
+                    <p>
+                        姓名：
+                        <input type="text" name="true_name" class="text-input small-input" value="{$user.real_name}">
+                    </p>
+                    <p>
+                        支付宝账号：
+                        <input type="text" name="alipay" class="text-input small-input">
+                    </p>
+                    <p>
+                        银行卡号：
+                        <input type="text" name="bank_card" class="text-input small-input">
+                    </p>
+                    <p>
+                        开户银行：
+                        <input type="text" name="bank_name" class="text-input small-input">
+                    </p>
+                    <p>
+                        银行所属地：
+                        <input type="text" name="city" class="text-input small-input">
+                    </p>
+                    <p>
+                        手机：
+                        <input type="tel" name="mobile" class="text-input small-input" value="{$user.mobile}">
+                    </p>
+                </div>
+                <br/>
+                <p>
+                    <eq name="user.is_freeze" value="0">
+                        <input type="submit" value="提 交" class="button">
+                    </eq>
+                </p>
+            </fieldset>
+            <div class="clear"></div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        var totalFee = "{$availableFee}";
+        function check () {
+            var money  = $('input[name="money"]').val();
+            var mobile = $('input[name="mobile"]').val();
+            if (money == '') {
+                alert('请输入金额');
+                return false;
+            } else if (money > totalFee) {
+                alert('超出可提现的范围');
+                return false;
+            } else if (money < 100) {
+                alert('请输入大于100的数值');
+                return false;
+            } else if (mobile == '') {
+                alert('请输入手机号');
+                return false;
+            }
+        }
+    </script>
+</block>
