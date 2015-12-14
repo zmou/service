@@ -55,8 +55,18 @@ class AccountController extends PublicController
 
 		$userInfo = $db->find($uid);
 
-		$MoneyLog = M('take_money')->where(array('user_id'=>$uid,'role_id'=>2,'status'=>1))->sum('money');
-
+		$MoneyLog = M('take_money')->where(array(
+										'user_id'=>$uid,
+										'role_id'=>2,
+										'status'=>array('NEQ',2)))
+									->sum('money');
+		
+		$MoneyFreeze = M('take_money')->where(array(
+										'user_id' => $uid,
+										'role_id' => 2,
+										'status'  => 0))
+									->sum('money');
+		
 		$map = array(
 			'role_id' => 1,
 			'order_status' => 3,
@@ -70,6 +80,7 @@ class AccountController extends PublicController
 		
 		$this->assign('user', $userInfo);
 		$this->assign('availableFee', $availableFee);
+		$this->assign('MoneyFreeze', $MoneyFreeze);
 		$this->display('withdraw_deposit');
 	}
 
