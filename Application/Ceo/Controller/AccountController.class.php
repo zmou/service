@@ -101,7 +101,8 @@ class AccountController extends PublicController
 				'city' => $arr['city'],
 				'true_name' => $arr['true_name'],
 				'mobile' => $arr['mobile'],
-				'pay_type' => $arr['pay_type']
+				'pay_type' => $arr['pay_type'],
+				'alipay' => $arr['alipay']
 			);
 			//var_dump($data);exit;
 			$res = M('take_money')->data($data)->add();

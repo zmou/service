@@ -67,12 +67,13 @@
             if (money == '') {
                 alert('请输入金额');
                 return false;
-            } else if (money > totalFee) {
+            } else if (money > parseFloat(totalFee)) {
                 alert('超出可提现的范围');
                 return false;
-            }
-			
-			else if (mobile == '') {
+            } else if (money < 100) {
+				alert('最低提现100');
+                return false;
+			} else if (mobile == '') {
                 alert('请输入手机号');
                 return false;
             }
