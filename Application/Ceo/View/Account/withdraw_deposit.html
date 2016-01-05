@@ -5,6 +5,7 @@
 <block name="content">
     <div class="tab-content default-tab" id="tab1">
         <form method="post" action="{:U('doWithdrawDeposit')}" onsubmit="return check();">
+			<input type="hidden" value="alipay" name="pay_type">
             <fieldset>
                 <legend class="button">用户账户信息</legend>
                 <div class="block">
@@ -60,19 +61,31 @@
         function check () {
             var money  = $('input[name="money"]').val();
             var mobile = $('input[name="mobile"]').val();
+			var alipay = $('input[name="alipay"]').val();
+			var bank_card = $('input[name="bank_card"]').val();
+			
             if (money == '') {
                 alert('请输入金额');
                 return false;
             } else if (money > totalFee) {
                 alert('超出可提现的范围');
                 return false;
-            } else if (money < 100) {
-                alert('请输入大于100的数值');
-                return false;
-            } else if (mobile == '') {
+            }
+			
+			else if (mobile == '') {
                 alert('请输入手机号');
                 return false;
             }
+			
+			if (alipay == '' && bank_card == '') {
+				alert('请至少填写一种支付方式');
+                return false;
+			}
+			if (alipay != '') {
+				$('input[name="pay_type"]').val('alipay');
+			} else if (bank_card != '') {
+				$('input[name="pay_type"]').val('bank');
+			}
         }
     </script>
 </block>

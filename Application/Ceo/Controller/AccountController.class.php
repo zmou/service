@@ -100,9 +100,10 @@ class AccountController extends PublicController
 				'bank_name' => $arr['bank_name'],
 				'city' => $arr['city'],
 				'true_name' => $arr['true_name'],
-				'mobile' => $arr['mobile']
+				'mobile' => $arr['mobile'],
+				'pay_type' => $arr['pay_type']
 			);
-			//var_dump($data);
+			//var_dump($data);exit;
 			$res = M('take_money')->data($data)->add();
 			//echo M('take_money')->getLastSql();exit;
 			if ($res) {
